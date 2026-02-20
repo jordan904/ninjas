@@ -330,8 +330,14 @@ html = f'''<!DOCTYPE html>
   .mobile-toggle span {{ display: block; width: 24px; height: 2px; background: var(--white); margin: 5px 0; transition: all 0.3s; }}
 
   @media (max-width: 768px) {{
-    nav {{ padding: 1rem 1.5rem; }}
-    .nav-links {{ display: none; }}
+    nav {{ padding: 1rem 1.5rem; flex-wrap: wrap; }}
+    .nav-links {{
+      display: none; flex-direction: column; width: 100%;
+      background: rgba(10,10,10,0.98); padding: 1rem 0; gap: 1rem;
+      order: 3;
+    }}
+    .nav-links.show {{ display: flex; }}
+    .nav-links a {{ padding: 0.5rem 0; font-size: 1rem; }}
     .nav-cta {{ display: none; }}
     .mobile-toggle {{ display: block; }}
     section {{ padding: 4rem 1.5rem; }}
