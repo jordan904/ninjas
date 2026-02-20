@@ -1,0 +1,634 @@
+import os
+
+# Read all base64 files
+b64 = {}
+for f in os.listdir('/tmp'):
+    if f.startswith('rn') and f.endswith('.b64'):
+        with open(f'/tmp/{f}', 'r') as fh:
+            b64[f.replace('.b64', '')] = fh.read()
+
+html = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roof Ninjas | Halifax's Premier Roofing Experts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {{
+    --black: #0a0a0a;
+    --dark: #111111;
+    --card: #1a1a1a;
+    --red: #c62828;
+    --red-light: #ef5350;
+    --red-glow: rgba(198,40,40,0.3);
+    --white: #f5f5f5;
+    --gray: #999;
+    --gray-dark: #333;
+  }}
+
+  *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
+  html {{ scroll-behavior: smooth; }}
+
+  body {{
+    font-family: "Inter", sans-serif;
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }}
+
+  /* NAV */
+  nav {{
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.2rem 4rem;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(198,40,40,0.15);
+    transition: all 0.3s;
+    min-height: 70px;
+  }}
+  nav.scrolled {{ background: rgba(10,10,10,0.98); box-shadow: 0 2px 30px rgba(0,0,0,0.5); }}
+
+  .nav-brand {{
+    display: flex; align-items: center; gap: 0.75rem;
+    text-decoration: none; color: var(--white);
+  }}
+  .nav-brand img {{ height: 42px; border-radius: 4px; background: #1a1a1a; padding: 2px; border: 1px solid rgba(198,40,40,0.4); }}
+  .nav-brand span {{
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.5rem; letter-spacing: 0.08em;
+  }}
+  .nav-brand span em {{ font-style: normal; color: var(--red); }}
+
+  .nav-links {{ display: flex; gap: 2rem; list-style: none; }}
+  .nav-links a {{
+    color: var(--gray); text-decoration: none; font-size: 0.85rem;
+    font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase;
+    transition: color 0.3s; position: relative;
+  }}
+  .nav-links a::after {{
+    content: ""; position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 2px; background: var(--red); transition: width 0.3s;
+  }}
+  .nav-links a:hover {{ color: var(--white); }}
+  .nav-links a:hover::after {{ width: 100%; }}
+
+  .nav-cta {{
+    background: var(--red); color: white; border: none;
+    padding: 0.6rem 1.5rem; font-size: 0.85rem; font-weight: 600;
+    letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer;
+    transition: all 0.3s; text-decoration: none;
+  }}
+  .nav-cta:hover {{ background: var(--red-light); box-shadow: 0 0 20px var(--red-glow); }}
+
+  /* HERO */
+  .hero {{
+    position: relative; height: 100vh; display: flex;
+    align-items: center; justify-content: center; overflow: hidden;
+    padding-top: 100px;
+  }}
+  .hero-bg {{
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center;
+    filter: brightness(0.55); transform: scale(1.05);
+    animation: heroZoom 20s ease-in-out infinite alternate;
+  }}
+  @keyframes heroZoom {{ from {{ transform: scale(1.05); }} to {{ transform: scale(1.15); }} }}
+
+  .hero-overlay {{
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.15), rgba(10,10,10,0.6));
+  }}
+
+  .hero-content {{
+    position: relative; z-index: 2; text-align: center;
+    max-width: 800px; padding: 0 2rem;
+  }}
+  .hero-badge {{
+    display: inline-block; padding: 0.4rem 1.2rem;
+    border: 1px solid var(--red); color: var(--red);
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.15em;
+    text-transform: uppercase; margin-bottom: 1.5rem;
+  }}
+  .hero h1 {{
+    font-family: "Bebas Neue", sans-serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 0.95; letter-spacing: 0.03em; margin-bottom: 1.2rem;
+  }}
+  .hero h1 em {{ font-style: normal; color: var(--red); }}
+  .hero p {{
+    font-size: 1.1rem; color: var(--gray); max-width: 550px;
+    margin: 0 auto 2.5rem; font-weight: 300;
+  }}
+  .hero-buttons {{ display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }}
+  .btn-primary {{
+    background: var(--red); color: white; border: none;
+    padding: 0.9rem 2.2rem; font-size: 0.9rem; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
+    transition: all 0.3s; text-decoration: none;
+  }}
+  .btn-primary:hover {{ background: var(--red-light); box-shadow: 0 0 30px var(--red-glow); }}
+  .btn-outline {{
+    background: transparent; color: var(--white);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 0.9rem 2.2rem; font-size: 0.9rem; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
+    transition: all 0.3s; text-decoration: none;
+  }}
+  .btn-outline:hover {{ border-color: var(--white); background: rgba(255,255,255,0.05); }}
+
+  .hero-stats {{
+    display: flex; justify-content: center; gap: 3rem;
+    margin-top: 2rem; padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }}
+  .hero-stat h3 {{
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 2.2rem; color: var(--red);
+  }}
+  .hero-stat p {{ font-size: 0.75rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em; }}
+
+  /* TRUST BAR */
+  .trust-bar {{
+    display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+    padding: 2rem 4rem;
+    background: var(--dark); border-top: 1px solid rgba(198,40,40,0.1);
+    border-bottom: 1px solid rgba(198,40,40,0.1);
+  }}
+  .trust-item {{
+    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 0.85rem; color: var(--gray);
+  }}
+  .trust-item svg {{ width: 18px; height: 18px; stroke: var(--red); fill: none; stroke-width: 2; }}
+
+  /* SECTIONS */
+  section {{ padding: 6rem 4rem; }}
+  .section-label {{
+    font-size: 0.75rem; font-weight: 600; color: var(--red);
+    letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.75rem;
+  }}
+  .section-title {{
+    font-family: "Bebas Neue", sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    letter-spacing: 0.02em; margin-bottom: 1rem;
+  }}
+  .section-subtitle {{
+    font-size: 1rem; color: var(--gray); max-width: 550px;
+    font-weight: 300; line-height: 1.7;
+  }}
+
+  /* ABOUT */
+  .about {{ background: var(--dark); }}
+  .about-grid {{
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; max-width: 1200px; margin: 0 auto; align-items: center;
+  }}
+  .about-images {{ position: relative; }}
+  .about-img-main {{
+    width: 100%; height: 400px; object-fit: cover;
+    border: 1px solid rgba(198,40,40,0.15);
+  }}
+  .about-img-accent {{
+    position: absolute; bottom: -2rem; right: -2rem;
+    width: 200px; height: 200px; object-fit: cover;
+    border: 3px solid var(--black);
+  }}
+  .about-text .section-subtitle {{ margin-bottom: 2rem; }}
+  .about-features {{ list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }}
+  .about-features li {{
+    display: flex; align-items: center; gap: 0.75rem;
+    font-size: 0.9rem; color: var(--gray);
+  }}
+  .about-features li svg {{ width: 16px; height: 16px; stroke: var(--red); fill: none; stroke-width: 2; flex-shrink: 0; }}
+
+  /* SERVICES */
+  .services-grid {{
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; max-width: 1200px; margin: 3rem auto 0;
+  }}
+  .service-card {{
+    background: var(--card); border: 1px solid rgba(255,255,255,0.04);
+    padding: 2.5rem 2rem; transition: all 0.4s; position: relative; overflow: hidden;
+  }}
+  .service-card::before {{
+    content: ""; position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: var(--red); transform: scaleX(0);
+    transition: transform 0.4s; transform-origin: left;
+  }}
+  .service-card:hover {{ transform: translateY(-4px); border-color: rgba(198,40,40,0.2); }}
+  .service-card:hover::before {{ transform: scaleX(1); }}
+  .service-card svg {{ width: 32px; height: 32px; stroke: var(--red); fill: none; stroke-width: 1.5; margin-bottom: 1.2rem; }}
+  .service-card h3 {{
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.3rem; letter-spacing: 0.04em; margin-bottom: 0.6rem;
+  }}
+  .service-card p {{ font-size: 0.85rem; color: var(--gray); line-height: 1.7; }}
+
+  /* GALLERY */
+  .gallery {{ background: var(--dark); }}
+  .gallery-grid {{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 250px;
+    gap: 0.5rem; max-width: 1200px; margin: 3rem auto 0;
+  }}
+  .gallery-item {{ overflow: hidden; position: relative; }}
+  .gallery-item.wide {{ grid-column: span 2; }}
+  .gallery-item.tall {{ grid-row: span 2; }}
+  .gallery-item img {{
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.6s; filter: brightness(0.85);
+  }}
+  .gallery-item:hover img {{ transform: scale(1.08); filter: brightness(1); }}
+
+  /* REVIEWS */
+  .reviews-grid {{
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; max-width: 1200px; margin: 3rem auto 0;
+  }}
+  .review-card {{
+    background: var(--card); border: 1px solid rgba(255,255,255,0.04);
+    padding: 2rem; position: relative;
+  }}
+  .review-stars {{ color: var(--red); font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 1rem; }}
+  .review-text {{ font-size: 0.88rem; color: var(--gray); line-height: 1.8; margin-bottom: 1.5rem; font-style: italic; }}
+  .review-author {{ font-size: 0.85rem; font-weight: 600; color: var(--white); }}
+  .review-source {{ font-size: 0.75rem; color: var(--gray); margin-top: 0.2rem; }}
+
+  /* CTA BAND */
+  .cta-band {{
+    background: var(--red); padding: 3.5rem 4rem;
+    display: flex; align-items: center; justify-content: center;
+    gap: 3rem; flex-wrap: wrap; text-align: center;
+  }}
+  .cta-band h2 {{
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 2.2rem; letter-spacing: 0.04em; color: white;
+  }}
+  .cta-band a {{
+    background: white; color: var(--red); border: none;
+    padding: 0.9rem 2.5rem; font-size: 0.9rem; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
+    transition: all 0.3s; text-decoration: none;
+  }}
+  .cta-band a:hover {{ background: var(--black); color: white; }}
+
+  /* CONTACT */
+  .contact {{ background: var(--dark); }}
+  .contact-grid {{
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; max-width: 1200px; margin: 3rem auto 0;
+  }}
+  .contact-info {{ display: flex; flex-direction: column; gap: 2rem; }}
+  .contact-item {{ display: flex; gap: 1rem; align-items: flex-start; }}
+  .contact-item svg {{ width: 20px; height: 20px; stroke: var(--red); fill: none; stroke-width: 2; flex-shrink: 0; margin-top: 2px; }}
+  .contact-item h4 {{ font-size: 0.9rem; margin-bottom: 0.3rem; }}
+  .contact-item p {{ font-size: 0.85rem; color: var(--gray); }}
+  .contact-item a {{ color: var(--red); text-decoration: none; }}
+  .contact-item a:hover {{ text-decoration: underline; }}
+
+  .contact-form {{ display: flex; flex-direction: column; gap: 1rem; }}
+  .contact-form input, .contact-form textarea, .contact-form select {{
+    background: var(--card); border: 1px solid rgba(255,255,255,0.08);
+    padding: 0.9rem 1rem; color: var(--white); font-family: inherit;
+    font-size: 0.9rem; outline: none; transition: border 0.3s;
+  }}
+  .contact-form input:focus, .contact-form textarea:focus, .contact-form select:focus {{
+    border-color: var(--red);
+  }}
+  .contact-form textarea {{ min-height: 120px; resize: vertical; }}
+  .contact-form select option {{ background: var(--card); }}
+  .form-row {{ display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }}
+
+  /* SOCIAL */
+  .social-links {{ display: flex; gap: 1rem; margin-top: 1.5rem; }}
+  .social-links a {{
+    width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s;
+  }}
+  .social-links a:hover {{ border-color: var(--red); background: rgba(198,40,40,0.1); }}
+  .social-links a svg {{ width: 18px; height: 18px; fill: var(--gray); }}
+  .social-links a:hover svg {{ fill: var(--red); }}
+
+  /* FOOTER */
+  footer {{
+    padding: 2rem 4rem;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.8rem; color: var(--gray);
+  }}
+
+  /* ANIMATIONS */
+  .reveal {{ opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }}
+  .reveal.visible {{ opacity: 1; transform: translateY(0); }}
+
+  /* MOBILE */
+  .mobile-toggle {{ display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; }}
+  .mobile-toggle span {{ display: block; width: 24px; height: 2px; background: var(--white); margin: 5px 0; transition: all 0.3s; }}
+
+  @media (max-width: 768px) {{
+    nav {{ padding: 1rem 1.5rem; }}
+    .nav-links {{ display: none; }}
+    .nav-cta {{ display: none; }}
+    .mobile-toggle {{ display: block; }}
+    section {{ padding: 4rem 1.5rem; }}
+    .about-grid {{ grid-template-columns: 1fr; gap: 2rem; }}
+    .about-img-accent {{ display: none; }}
+    .services-grid {{ grid-template-columns: 1fr; }}
+    .gallery-grid {{ grid-template-columns: 1fr 1fr; grid-auto-rows: 200px; }}
+    .gallery-item.wide {{ grid-column: span 2; }}
+    .gallery-item.tall {{ grid-row: span 1; }}
+    .reviews-grid {{ grid-template-columns: 1fr; }}
+    .contact-grid {{ grid-template-columns: 1fr; }}
+    .hero-stats {{ gap: 1.5rem; }}
+    .trust-bar {{ padding: 1.5rem; gap: 1.5rem; }}
+    .cta-band {{ padding: 2.5rem 1.5rem; }}
+    footer {{ flex-direction: column; gap: 0.5rem; text-align: center; padding: 2rem 1.5rem; }}
+  }}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-brand">
+    <img src="data:image/jpeg;base64,{b64['rn12']}" alt="Roof Ninjas Logo">
+    <span>ROOF <em>NINJAS</em></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#gallery">Our Work</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="tel:9027894492" class="nav-cta">902-789-HIYA</a>
+  <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg" style="background-image: url('data:image/jpeg;base64,{b64['rn8']}')"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Halifax's Trusted Roofing Experts</div>
+    <h1>PRECISION ROOFING.<br><em>NINJA</em> EXECUTION.</h1>
+    <p>Residential and commercial roofing done right. BBB A+ rated with over a decade of protecting Nova Scotia homes.</p>
+    <div class="hero-buttons">
+      <a href="tel:9027894492" class="btn-primary">Call 902-789-HIYA</a>
+      <a href="#contact" class="btn-outline">Get a Free Quote</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><h3>12+</h3><p>Years Experience</p></div>
+      <div class="hero-stat"><h3>5.0</h3><p>Google Rating</p></div>
+      <div class="hero-stat"><h3>A+</h3><p>BBB Rated</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item">
+    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    BBB Accredited Since 2017
+  </div>
+  <div class="trust-item">
+    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    5-Star Google Reviews
+  </div>
+  <div class="trust-item">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Mon - Fri 8AM to 5PM
+  </div>
+  <div class="trust-item">
+    <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    Timberlea, Nova Scotia
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-grid">
+    <div class="about-images reveal">
+      <img class="about-img-main" src="data:image/jpeg;base64,{b64['rn1']}" alt="Roof Ninjas crew at work">
+      <img class="about-img-accent" src="data:image/jpeg;base64,{b64['rn6']}" alt="Roofing tools">
+    </div>
+    <div class="about-text reveal">
+      <div class="section-label">About Roof Ninjas</div>
+      <h2 class="section-title">BUILT ON TRUST.<br>DRIVEN BY CRAFT.</h2>
+      <p class="section-subtitle">Founded in 2013 by Will and Beth, Roof Ninjas has grown from a small local crew into one of Halifax's most trusted roofing companies. Every project gets the same treatment: thorough inspection, honest pricing, and craftsmanship that speaks for itself.</p>
+      <ul class="about-features">
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Locally owned and operated</li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Full residential and commercial roofing</li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Insurance claim specialists</li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Free on-site inspections and quotes</li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Complete cleanup guaranteed</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div style="text-align:center" class="reveal">
+    <div class="section-label">What We Do</div>
+    <h2 class="section-title">ROOFING SERVICES</h2>
+    <p class="section-subtitle" style="margin: 0 auto">From shingle replacements to full commercial builds, we handle every aspect of your roofing project.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <h3>Residential Roofing</h3>
+      <p>Complete roof replacements, repairs, and new installations for homes of all sizes. We work with all shingle types and styles.</p>
+    </div>
+    <div class="service-card reveal">
+      <svg viewBox="0 0 24 24"><rect x="1" y="3" width="22" height="18" rx="2"/><line x1="1" y1="9" x2="23" y2="9"/></svg>
+      <h3>Commercial Roofing</h3>
+      <p>Large-scale commercial projects from retail plazas to institutional buildings. Experienced with flat roofs, metal, and specialty systems.</p>
+    </div>
+    <div class="service-card reveal">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <h3>Insurance Claims</h3>
+      <p>We work directly with your insurance company to make storm damage claims painless. Full documentation and assessment provided.</p>
+    </div>
+    <div class="service-card reveal">
+      <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <h3>Roof Inspections</h3>
+      <p>Thorough inspections with detailed reporting. We identify problems early so you can plan repairs before they become emergencies.</p>
+    </div>
+    <div class="service-card reveal">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      <h3>Roof Maintenance</h3>
+      <p>Preventative maintenance programs to extend the life of your roof. Regular check-ups catch small issues before they become costly.</p>
+    </div>
+    <div class="service-card reveal">
+      <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+      <h3>New Construction</h3>
+      <p>Partnering with builders on new home and commercial construction projects. Quality installations that protect your investment from day one.</p>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="gallery">
+  <div style="text-align:center" class="reveal">
+    <div class="section-label">Our Portfolio</div>
+    <h2 class="section-title">RECENT PROJECTS</h2>
+    <p class="section-subtitle" style="margin: 0 auto">From heritage churches to waterfront properties, every roof tells a story.</p>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item wide"><img src="data:image/jpeg;base64,{b64['rn']}" alt="Completed shingle roof"></div>
+    <div class="gallery-item"><img src="data:image/jpeg;base64,{b64['rn2']}" alt="Aerial roof view"></div>
+    <div class="gallery-item"><img src="data:image/jpeg;base64,{b64['rn3']}" alt="Roof in progress"></div>
+    <div class="gallery-item"><img src="data:image/jpeg;base64,{b64['rn7']}" alt="Waterfront roofing project"></div>
+    <div class="gallery-item"><img src="data:image/jpeg;base64,{b64['rn8']}" alt="Commercial facility roof"></div>
+    <div class="gallery-item wide"><img src="data:image/jpeg;base64,{b64['rn9']}" alt="Heritage church restoration"></div>
+    <div class="gallery-item"><img src="data:image/jpeg;base64,{b64['rn4']}" alt="Residential roof completed"></div>
+    <div class="gallery-item"><img src="data:image/jpeg;base64,{b64['rn10']}" alt="Luxury home roofing"></div>
+    <div class="gallery-item"><img src="data:image/jpeg;base64,{b64['rn5']}" alt="Commercial roofing project"></div>
+    <div class="gallery-item"><img src="data:image/jpeg;base64,{b64['rn11']}" alt="Commercial building roof"></div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div style="text-align:center" class="reveal">
+    <div class="section-label">Client Testimonials</div>
+    <h2 class="section-title">WHAT OUR CLIENTS SAY</h2>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card reveal">
+      <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="review-text">"Roof Ninja was amazing. They started on time and were very efficient. The set up to protect our house and property was more than I have ever seen, its was the talk of my neighborhood. The new roof looks amazing."</p>
+      <div class="review-author">Leah Macleod</div>
+      <div class="review-source">Google Review</div>
+    </div>
+    <div class="review-card reveal">
+      <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="review-text">"Roof Ninja was incredible to work with start to finish. They communicated often and effectively, were always available to answer my questions as a first time home buyer, and were extremely accommodating."</p>
+      <div class="review-author">Patrick Kervin</div>
+      <div class="review-source">Google Review</div>
+    </div>
+    <div class="review-card reveal">
+      <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="review-text">"We had a porch leak that needed fixing. From the assessment visit straight through to the repair, everything was great. The owners were reachable and kept in communication about everything."</p>
+      <div class="review-author">Erica Gallant</div>
+      <div class="review-source">Google Review</div>
+    </div>
+    <div class="review-card reveal">
+      <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="review-text">"We were referred to Will and his team by a friend who swears by them. They came out at 8:00am and were done before noon. Everything was cleaned up and you couldn't tell where the older shingles finished and the new shingles started."</p>
+      <div class="review-author">Paul &amp; Tabatha Sheppard</div>
+      <div class="review-source">Google Review</div>
+    </div>
+    <div class="review-card reveal">
+      <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="review-text">"The Roof Ninjas crew from start to finish were top notch. Quick and efficient work and Will and Beth were great to work with throughout. Love to support local small business owners!"</p>
+      <div class="review-author">PJ M&auml;kinen</div>
+      <div class="review-source">Google Review &middot; Local Guide</div>
+    </div>
+    <div class="review-card reveal">
+      <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="review-text">"Contacted Roof Ninjas and they were able to fit me in quickly. Arrived on time, well equipped and ready to fix the issue. Would very much recommend this company, Beth was great to deal with."</p>
+      <div class="review-author">Sean</div>
+      <div class="review-source">Google Review &middot; Local Guide</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<div class="cta-band">
+  <h2>READY TO PROTECT YOUR HOME? LET'S TALK.</h2>
+  <a href="tel:9027894492">Call 902-789-HIYA</a>
+</div>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-grid">
+    <div class="reveal">
+      <div class="section-label">Get In Touch</div>
+      <h2 class="section-title">REQUEST A FREE QUOTE</h2>
+      <div class="contact-info">
+        <div class="contact-item">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          <div>
+            <h4>Phone</h4>
+            <p><a href="tel:9027894492">(902) 789-4492</a></p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <div>
+            <h4>Location</h4>
+            <p>3031 St Margarets Bay Rd<br>Timberlea, NS B3T 1H5</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <div>
+            <h4>Hours</h4>
+            <p>Monday - Friday: 8:00 AM - 5:00 PM<br>Saturday - Sunday: Closed</p>
+          </div>
+        </div>
+      </div>
+      <div class="social-links">
+        <a href="https://www.facebook.com/RoofNinjasHiya" target="_blank" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="reveal">
+      <form class="contact-form" onsubmit="event.preventDefault(); alert('Thank you! We will be in touch shortly.');">
+        <div class="form-row">
+          <input type="text" placeholder="Your Name" required>
+          <input type="tel" placeholder="Phone Number" required>
+        </div>
+        <input type="email" placeholder="Email Address" required>
+        <select>
+          <option value="" disabled selected>Select a Service</option>
+          <option>Residential Roofing</option>
+          <option>Commercial Roofing</option>
+          <option>Insurance Claim</option>
+          <option>Roof Inspection</option>
+          <option>Roof Maintenance</option>
+          <option>New Construction</option>
+          <option>Other</option>
+        </select>
+        <textarea placeholder="Tell us about your project..."></textarea>
+        <button type="submit" class="btn-primary" style="width:100%; text-align:center;">Send Request</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>&copy; 2025 Roof Ninjas. All rights reserved.</span>
+  <span>3031 St Margarets Bay Rd, Timberlea, NS</span>
+</footer>
+
+<script>
+  // Scroll nav
+  window.addEventListener('scroll', () => {{
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 50);
+  }});
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {{
+    entries.forEach(e => {{ if (e.isIntersecting) {{ e.target.classList.add('visible'); observer.unobserve(e.target); }} }});
+  }}, {{ threshold: 0.15 }});
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>'''
+
+with open('c:/Projects/claude-programs/websites/ninjas/index.html', 'w', encoding='utf-8') as f:
+    f.write(html)
+
+print(f'Website written: {len(html)} chars')
