@@ -237,6 +237,12 @@
   }
   .gallery-item:hover img { transform: scale(1.08); filter: brightness(1); }
 
+  /* LIGHTBOX */
+  .lightbox { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.92); align-items: center; justify-content: center; cursor: pointer; }
+  .lightbox.active { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 4px; }
+  .lightbox-close { position: fixed; top: 1.5rem; right: 2rem; color: white; font-size: 2rem; cursor: pointer; z-index: 1001; font-family: sans-serif; }
+
   /* REVIEWS */
   .reviews-grid {
     display: grid; grid-template-columns: repeat(3, 1fr);
@@ -643,5 +649,25 @@
   }, { threshold: 0.15 });
   reveals.forEach(el => observer.observe(el));
 </script>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('active')">
+  <span class="lightbox-close">&times;</span>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+  document.querySelectorAll('.gallery-item img').forEach(img => {
+    img.style.cursor = 'pointer';
+    img.addEventListener('click', () => {
+      document.getElementById('lightbox-img').src = img.src;
+      document.getElementById('lightbox').classList.add('active');
+    });
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('active');
+  });
+</script>
+
 </body>
 </html>
