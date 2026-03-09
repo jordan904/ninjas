@@ -21,13 +21,14 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; background: var(--black); overflow-x: clip; }
+  html { scroll-behavior: smooth; background: var(--black); }
 
   body {
     font-family: "Inter", sans-serif;
     background: var(--black);
     color: var(--white);
     line-height: 1.6;
+    overflow-x: hidden;
   }
 
   /* NAV */
@@ -237,8 +238,8 @@
   .gallery-item:hover img { transform: scale(1.08); filter: brightness(1); }
 
   /* LIGHTBOX */
-  .lightbox { display: none; position: fixed; height: 0; overflow: hidden; inset: 0; z-index: 1000; background: rgba(0,0,0,0.92); align-items: center; justify-content: center; cursor: pointer; }
-  .lightbox.active { display: flex; height: auto; overflow: visible; }
+  .lightbox { display: none; }
+  .lightbox.active { display: flex; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.92); align-items: center; justify-content: center; cursor: pointer; }
   .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 4px; }
   .lightbox-close { position: fixed; top: 1.5rem; right: 2rem; color: white; font-size: 2rem; cursor: pointer; z-index: 1001; font-family: sans-serif; }
 
@@ -630,17 +631,17 @@
   </div>
 </section>
 
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('active')">
+  <span class="lightbox-close">&times;</span>
+  <img id="lightbox-img" alt="">
+</div>
+
 <!-- FOOTER -->
 <footer>
   <span>&copy; 2025 Roof Ninjas LTD. All rights reserved.</span>
   <span>3031 St Margarets Bay Rd, Timberlea, NS</span>
 </footer>
-
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="this.classList.remove('active')">
-  <span class="lightbox-close">&times;</span>
-  <img id="lightbox-img" src="" alt="">
-</div>
 
 <script>
   // Scroll nav
@@ -665,6 +666,13 @@
   });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('active');
+  });
+
+  // Ensure page ends at footer - no extra space
+  window.addEventListener('load', () => {
+    const footer = document.querySelector('footer');
+    const footerBottom = footer.offsetTop + footer.offsetHeight;
+    document.body.style.height = footerBottom + 'px';
   });
 </script>
 </body>
