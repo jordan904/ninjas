@@ -28,7 +28,8 @@
     background: var(--black);
     color: var(--white);
     line-height: 1.6;
-    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
   }
 
   /* NAV */
@@ -179,7 +180,7 @@
     display: grid; grid-template-columns: 1fr 1fr;
     gap: 4rem; max-width: 1200px; margin: 0 auto; align-items: center;
   }
-  .about-images { position: relative; }
+  .about-images { position: relative; overflow: hidden; }
   .about-img-main {
     width: 100%; height: 400px; object-fit: cover;
     border: 1px solid rgba(198,40,40,0.15);
@@ -666,13 +667,6 @@
   });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('active');
-  });
-
-  // Ensure page ends at footer - no extra space
-  window.addEventListener('load', () => {
-    const footer = document.querySelector('footer');
-    const footerBottom = footer.offsetTop + footer.offsetHeight;
-    document.body.style.height = footerBottom + 'px';
   });
 </script>
 </body>
