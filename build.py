@@ -589,13 +589,13 @@ html = f'''<!DOCTYPE html>
       </div>
     </div>
     <div class="reveal">
-      <form class="contact-form" onsubmit="event.preventDefault(); alert('Thank you! We will be in touch shortly.');">
+      <form class="contact-form" action="https://formspree.io/f/jordan@novaworksdigital.ca" method="POST">
         <div class="form-row">
-          <input type="text" placeholder="Your Name" required>
-          <input type="tel" placeholder="Phone Number" required>
+          <input type="text" name="name" placeholder="Your Name" required>
+          <input type="tel" name="phone" placeholder="Phone Number" required>
         </div>
-        <input type="email" placeholder="Email Address" required>
-        <select>
+        <input type="email" name="email" placeholder="Email Address" required>
+        <select name="service">
           <option value="" disabled selected>Select a Service</option>
           <option>Residential Roofing</option>
           <option>Commercial Roofing</option>
@@ -605,7 +605,9 @@ html = f'''<!DOCTYPE html>
           <option>New Construction</option>
           <option>Other</option>
         </select>
-        <textarea placeholder="Tell us about your project..."></textarea>
+        <textarea name="message" placeholder="Tell us about your project..."></textarea>
+        <input type="hidden" name="_subject" value="New Quote Request - Roof Ninjas Website">
+        <input type="hidden" name="_next" value="https://roofninjas.ca">
         <button type="submit" class="btn-primary" style="width:100%; text-align:center;">Send Request</button>
       </form>
     </div>
