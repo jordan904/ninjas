@@ -589,7 +589,7 @@ html = f'''<!DOCTYPE html>
       </div>
     </div>
     <div class="reveal">
-      <form class="contact-form" action="https://formspree.io/f/jordan@novaworksdigital.ca" method="POST">
+      <form class="contact-form" action="https://formspree.io/f/xbdzgvqd" method="POST">
         <div class="form-row">
           <input type="text" name="name" placeholder="Your Name" required>
           <input type="tel" name="phone" placeholder="Phone Number" required>
